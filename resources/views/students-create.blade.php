@@ -17,7 +17,7 @@
         </div>
 
 
-        <div class="row mt-3">
+        <div class="row mt-3 table-responsive">
             <form method="POST" action="{{ route('students.add') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered">

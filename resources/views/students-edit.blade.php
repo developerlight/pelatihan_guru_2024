@@ -17,7 +17,7 @@
         </div>
 
 
-        <div class="row mt-3">
+        <div class="row mt-3 table-responsive">
             <form method="POST" action="{{ route('students.update', $data->id) }}" enctype="multipart/form-data">
                 @method('PATCH')
                 @csrf
@@ -26,8 +26,10 @@
                         <tr>
                             <td>Image</td>
                             <td>
-                                <img src="{{ asset('storage/'. $data->image) }}" alt="" width="auto" height="100">
-                                <input required="required" class="form-control" type="file"
+                                @if($data->image)
+                                    <img src="{{ asset('storage/'. $data->image) }}" alt="" width="auto" height="100">
+                                @endif
+                                <input class="form-control" type="file" value="{{ $data->image }}"
                                     name="image">
                             </td>
                         </tr>

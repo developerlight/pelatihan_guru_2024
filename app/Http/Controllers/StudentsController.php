@@ -32,7 +32,7 @@ class StudentsController extends Controller
             'child_order' => 'required',
             'sibling_count' => 'required',
             'language' => 'required',
-            'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'unlable|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [
             'nisn.required' => 'NISN is required',
             'full_name.required' => 'Full Name is required',
@@ -45,7 +45,6 @@ class StudentsController extends Controller
             'child_order.required' => 'Child Order is required',
             'sibling_count.required' => 'Sibling Count is required',
             'language.required' => 'Language is required',
-            'image.required' => 'Image is required',
         ]);
 
         $data = $request->all();
@@ -57,7 +56,18 @@ class StudentsController extends Controller
         return to_route('students.index')->with('success', 'Data has been added');
     }
 
+    public function show(students $student) {
+
+        $data = $student;
+        dd($data);
+        // return view('students-show', compact('data'));
+    }
+
     public function edit($id) {
+
+        // find jika id tidak ada maka akan menampilkan null
+        // findOrFail jika file tidak ada maka akan menampilkan error 404
+
         $data = students::query()->findOrFail($id);
         return view('students-edit', compact('data'));
     }
@@ -75,7 +85,7 @@ class StudentsController extends Controller
             'child_order' => 'required',
             'sibling_count' => 'required',
             'language' => 'required',
-            'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'unlabel|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [
             'nisn.required' => 'NISN is required',
             'full_name.required' => 'Full Name is required',
@@ -88,13 +98,13 @@ class StudentsController extends Controller
             'child_order.required' => 'Child Order is required',
             'sibling_count.required' => 'Sibling Count is required',
             'language.required' => 'Language is required',
-            'image.required' => 'Image is required',
         ]);
 
         $student = students::query()->findOrFail($id);
         $datas = $request->all();
         $datas['image'] = $student->image;
         
+        // hasFile = untuk mengecek apakah file ada atau tidak
         if ($request->hasFile('image')) {
             if ($student->image == !null) {
                 Storage::disk(name:'public')->delete($student->image);
