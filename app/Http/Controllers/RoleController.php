@@ -95,7 +95,7 @@ class RoleController extends Controller
         return redirect('roles')->with('success', 'Role deleted successfully');
     }
 
-    public function addPermissionToRole($roleId)
+    public function addPermissionsToRole($roleId)
     {
         $permissions = Permission::get();
         $role = Role::findOrFail($roleId);
@@ -104,21 +104,22 @@ class RoleController extends Controller
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
             ->all();
 
-        return view('role-permission.role.add-permission', [
+        return view('role-permission.role.add-permissions', [
             'role' => $role,
             'permissions' => $permissions,
             'rolePermissions' => $rolePermissions
         ]);
     }
 
-    public function givePermissionToRole(Request $request, $roleId)
+    public function givePermissionsToRole(Request $request, $roleId)
     {
         $request->validate([
             'permissions' => 'required',
         ]);
-
+        $permissions = Permission::get();
         $role = Role::findOrFail($roleId);
         $role->syncPermissions($request->permissions);
+        $permissions->syncRoles($role);
 
         return redirect()->back()->with('success', 'Permission added to role successfully');
     }

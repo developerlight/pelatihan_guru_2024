@@ -15,14 +15,24 @@ class students extends Model
         'nisn',
         'full_name',
         'call_name',
-        'gender',
+        'gender_id',
         'birth_date',
         'birth_place',
-        'religion',
+        'religion_id',
         'citizenship',
         'child_order',
         'sibling_count',
         'language',
-        'image'
+        'image',
+        'address_id'
     ];
+
+    public function gender(){
+        return $this->belongsTo(Genders::class);
+    }
+    
+    public function religion(){
+        return $this->belongsTo(Religions::class);
+    }
+    
 }

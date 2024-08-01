@@ -57,8 +57,15 @@
                         <tr>
                             <td>Gender</td>
                             <td>
-                                <input autocomplete="off" value="{{ $data->gender }}" class="form-control" type="text"
-                                    name="gender">
+                                <select name="gender_id" id="" class="form-control">
+                                    <option value="{{$data->gender_id}}">{{$data->gender->gender}}</option>
+                                    @foreach($genders as $gender)
+                                        <option value="{{ $gender->id }}" 
+                                            {{ ($gender->id == old('gender_id')) ? 'selected' : '' }}>
+                                            {{ $gender->gender }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -77,8 +84,15 @@
                         <tr>
                             <td>Religion</td>
                             <td>
-                                <input autocomplete="off" value="{{ $data->religion }}" class="form-control" type="text"
-                                    name="religion">
+                                <select name="religion_id" id="" class="form-control">
+                                    <option value="{{$data->religion_id}}">{{$data->religion->religion}}</option>
+                                    @foreach($religions as $religion)
+                                        <option value="{{ $religion->id }}"
+                                        {{ ($religion->id == old('religion_id')) ? 'selected' : '' }}>
+                                        {{ $religion->religion }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </td>
                         </tr>
                         <tr>

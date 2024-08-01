@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('nisn')->unique();
             $table->string('full_name');
             $table->string('call_name');
-            $table->string('gender');
+            $table->foreignId('gender_id')->constrained();
             $table->date('birth_date');
             $table->string('birth_place');
-            $table->string('religion');
+            $table->foreignId('religion_id')->constrained();
             $table->string('citizenship');
             $table->string('child_order');
             $table->string('sibling_count');

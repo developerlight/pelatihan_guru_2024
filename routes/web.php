@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DependantDropdownController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentsController;
@@ -7,7 +8,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\PermissionRegistrar;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,8 +35,8 @@ Route::middleware('auth')->group(function() {
         
         Route::resource('roles', RoleController::class);
         Route::get('roles/{roleId}/delete', [RoleController::class, 'destroy'])->name('roles.delete');
-        Route::get('roles/{roleId}/give-permissions', [RoleController::class, 'givePermissions'])->name('roles.give-permissions');
-        Route::put('roles/{roleId}/give-permissions', [RoleController::class, 'givePermissionsToRole'])->name('roles.give-permissions-to-role');
+        Route::get('roles/{roleId}/give-permissions', [RoleController::class, 'addPermissionsToRole'])->name('roles.give-permissions');
+        Route::put('roles/{roleId}/give-permissions', [RoleController::class, 'givePermissionsToRole'])->name('roles.give-permissions');
         
         Route::resource('permissions', PermissionController::class);
         Route::get('permissions/{permissionId}/delete', [PermissionController::class, 'destroy']);

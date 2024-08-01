@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
     <div class="container">
         <div class="row">
             @if ($errors->any())
@@ -13,7 +14,7 @@
             @endif
         </div>
         <div class="row">
-            <h3>Tambah Kategori Baru</h3>
+            <h3>Tambah Data Siswa Baru</h3>
         </div>
 
 
@@ -46,8 +47,15 @@
                         <tr>
                             <td>Gender</td>
                             <td>
-                                <input autocomplete="off" value="{{ old('name') }}" class="form-control" type="text"
-                                    name="gender">
+                                <select name="gender_id" id="" class="form-control">
+                                    <option value="">__pilih__</option>
+                                    @foreach($genders as $gender)
+                                        <option value="{{ $gender->id }}" 
+                                            {{ ($gender->id == old('gender_id')) ? 'selected' : '' }}>
+                                            {{ $gender->gender }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -66,8 +74,17 @@
                         <tr>
                             <td>Religion</td>
                             <td>
-                                <input autocomplete="off" value="{{ old('name') }}" class="form-control" type="text"
-                                    name="religion">
+                                <!-- Religion Select -->
+                                <!-- <label for="religion_id">Religion:</label> -->
+                                <select name="religion_id" id="" class="form-control">
+                                    <option value="">__pilih__</option>
+                                    @foreach($religions as $religion)
+                                        <option value="{{ $religion->id }}"
+                                        {{ ($religion->id == old('religion_id')) ? 'selected' : '' }}>
+                                        {{ $religion->religion }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +118,7 @@
                         <tr>
                             <td>Image</td>
                             <td>
-                                <input required="required" class="form-control" type="file"
+                                <input class="form-control" type="file"
                                     name="image">
                             </td>
                         </tr>

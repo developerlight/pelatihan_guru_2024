@@ -16,7 +16,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="{{ url('roles/'.$role->id.'/give-permissions') }}" method="POST">
+                        <form action="{{ route('roles.give-permissions', $role->id) }}" method="POST">
                             @csrf
                             @method('PUT')
 

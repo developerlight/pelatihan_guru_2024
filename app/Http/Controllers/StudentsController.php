@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genders;
+use App\Models\Religions;
 use App\Models\students;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,13 +12,15 @@ class StudentsController extends Controller
 {
     public function index() {
         // membuat pagination
-        $datas = students::paginate(10);
+        $datas = students::with(['gender', 'religion'])->paginate(10);
         // dd($datas);
         return view('students', compact('datas'));
     }
 
-    public function create() {
-        return view('students-create');
+    public function create(Religions $religions, Genders $genders) {
+        $religions = $religions->get();
+        $genders = $genders->get();
+        return view('students-create', compact('religions','genders'));
     }
 
     public function add(Request $request) {
@@ -24,23 +28,23 @@ class StudentsController extends Controller
             'nisn' => 'required',
             'full_name' => 'required',
             'call_name' => 'required',
-            'gender' => 'required',
+            'gender_id' => 'required',
             'birth_date' => 'required',
             'birth_place' => 'required',
-            'religion' => 'required',
+            'religion_id' => 'required',
             'citizenship' => 'required',
             'child_order' => 'required',
             'sibling_count' => 'required',
             'language' => 'required',
-            'image' => 'unlable|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [
             'nisn.required' => 'NISN is required',
             'full_name.required' => 'Full Name is required',
             'call_name.required' => 'Call Name is required',
-            'gender.required' => 'Gender is required',
+            'gender_id.required' => 'Gender is required',
             'birth_date.required' => 'Birth Date is required',
             'birth_place.required' => 'Birth Place is required',
-            'religion.required' => 'Religion is required',
+            'religion_id.required' => 'Religion is required',
             'citizenship.required' => 'Citizenship is required',
             'child_order.required' => 'Child Order is required',
             'sibling_count.required' => 'Sibling Count is required',
@@ -49,7 +53,9 @@ class StudentsController extends Controller
 
         $data = $request->all();
         // dd($request->image);
-        $data['image'] = Storage::disk(name:'public')->put(path:'images', contents:$request->file('image'));
+        if ($request->image) {
+            $data['image'] = Storage::disk('public')->put('images', $request->file('image'));
+        }
 
         students::query()->create($data);
 
@@ -57,19 +63,20 @@ class StudentsController extends Controller
     }
 
     public function show(students $student) {
-
+        // with = untuk mengambil data relasi pasangan nya pake first
+        // 
         $data = $student;
-        dd($data);
-        // return view('students-show', compact('data'));
+        return view('students-view', compact('data'));
     }
 
-    public function edit($id) {
+    public function edit($id , Religions $religions, Genders $genders) {
 
         // find jika id tidak ada maka akan menampilkan null
         // findOrFail jika file tidak ada maka akan menampilkan error 404
-
+        $religions = $religions->get();
+        $genders = $genders->get();
         $data = students::query()->findOrFail($id);
-        return view('students-edit', compact('data'));
+        return view('students-edit', compact('data', 'religions','genders'));
     }
 
     public function update(Request $request, $id) {
@@ -77,27 +84,30 @@ class StudentsController extends Controller
             'nisn' => 'required',
             'full_name' => 'required',
             'call_name' => 'required',
-            'gender' => 'required',
+            'gender_id' => 'required',
             'birth_date' => 'required',
             'birth_place' => 'required',
-            'religion' => 'required',
+            'religion_id' => 'required',
             'citizenship' => 'required',
             'child_order' => 'required',
             'sibling_count' => 'required',
             'language' => 'required',
-            'image' => 'unlabel|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [
             'nisn.required' => 'NISN is required',
             'full_name.required' => 'Full Name is required',
             'call_name.required' => 'Call Name is required',
-            'gender.required' => 'Gender is required',
+            'gender_id.required' => 'Gender is required',
             'birth_date.required' => 'Birth Date is required',
             'birth_place.required' => 'Birth Place is required',
-            'religion.required' => 'Religion is required',
+            'religion_id.required' => 'Religion is required',
             'citizenship.required' => 'Citizenship is required',
             'child_order.required' => 'Child Order is required',
             'sibling_count.required' => 'Sibling Count is required',
             'language.required' => 'Language is required',
+            'image.nullable' => 'Image can be null',
+            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, svg',
+            'image.max' => 'The image may not be greater than 2048 kilobytes',
         ]);
 
         $student = students::query()->findOrFail($id);
